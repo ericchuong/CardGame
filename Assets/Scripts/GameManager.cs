@@ -9,44 +9,45 @@ public class GameManager : MonoBehaviour
     public Sprite[] cardFace;
     public Sprite cardBack;
     public GameObject[] cards;
-    public Text matchText;
+    public Text royalCounter;
 
     private bool _init = false;
-    private int _matches = 13;
+    private int _counter = 0;
+
+    private List<int> initUsedCardValues = new List<int>(); // list of values of cards used during initialization
+    private List<int> usedCards = new List<int>(); // list of cards used
+    private List<int> usedCardValues = new List<int>(); // list of values of cards used
 
     // Update is called once per frame
     void Update()
     {
         if (!_init)
-            initializeCards();
-        if (Input.GetMouseButtonUp(0))
+            initializeCards(); // initialize every card when the game starts
+        if (Input.GetMouseButtonUp(0)) // every time a card is clicked
             checkCards();
     }
 
     void initializeCards()
     {
-        for (int id = 0; id < 2; id++)
-        //checking for matches of 2 cards
+        int choice;
+        for (int i = 0; i < cards.Length; i++)
+        // initializing cards to a value
         {
-            for (int i = 1; i < 14; i++)
-            // checking values of cards
+            choice = Random.Range(0, 52); // each card is chosen at random
+            while (initUsedCardValues.Contains(choice)) // make sure there are no duplicate cards in the deck
             {
-                bool test = false;
-                int choice = 0;
-                while (!test)
-                {
-                    choice = Random.Range(0, cards.Length);
-                    test = !(cards[choice].GetComponent<Card>().initialized);
-                }
-                cards[choice].GetComponent<Card>().cardValue = i;
-                cards[choice].GetComponent<Card>().initialized = true;
+                choice = Random.Range(0, 52);
             }
+            cards[i].GetComponent<Card>().cardValue = choice;
+            cards[i].GetComponent<Card>().initialized = true;
+            initUsedCardValues.Add(choice);
         }
 
         foreach (GameObject c in cards)
+        {
             c.GetComponent<Card>().setupGraphics();
-        if (!_init)
             _init = true;
+        }
     }
 
     public Sprite getCardBack()
@@ -56,42 +57,39 @@ public class GameManager : MonoBehaviour
 
     public Sprite getCardFace(int i)
     {
-        return cardFace[i - 1];
+        return cardFace[i];
     }
 
     void checkCards()
     {
-        List<int> c = new List<int>();
-
         for (int i = 0; i < cards.Length; i++)
         {
-            //if card is face up, state = 1
             if (cards[i].GetComponent<Card>().state == 1)
-                c.Add(i);
+            {
+                // if card is face up, state = 1
+                if (!usedCardValues.Contains(cards[i].GetComponent<Card>().cardValue))
+                {
+                    // if Card is not already included in the Used Cards List, add it
+                    usedCards.Add(i);
+                }
+                // add Card Value to the Used Card Values List
+                usedCardValues.Add(cards[i].GetComponent<Card>().cardValue);
+            }
         }
 
-        if (c.Count % 2 == 0)
-            //when 2 cards are flipped, check if they match
-            cardComparison(c);
+        //when card is flipped, check if it is a royal
+        cardComparison(usedCards);
     }
 
     void cardComparison(List<int> c)
     {
-        Card.DO_NOT = true;
-        int x = 0;
-        if (cards[c[0]].GetComponent<Card>().cardValue == cards[c[1]].GetComponent<Card>().cardValue)
+        if (cards[c[c.Count - 1]].GetComponent<Card>().cardValue > 35)
         {
-            x = 2;
-            _matches--;
-            matchText.text = "Royals Drawn " + _matches;
-            if (_matches == 0)
+            // CARD IS A ROYAL
+            _counter++;
+            royalCounter.text = "Royals Drawn " + _counter;
+            if (_counter == 16)
                 SceneManager.LoadScene("MainMenu");
-        }
-
-        for (int i = 0; i < c.Count; i++)
-        {
-            cards[c[i]].GetComponent<Card>().state = x;
-            cards[c[i]].GetComponent<Card>().falseCheck();
         }
     }
 }

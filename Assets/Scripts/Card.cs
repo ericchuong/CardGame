@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Card : MonoBehaviour {
 
-    public static bool DO_NOT = false;
+    public static bool DO_NOT = true;
 
     [SerializeField]
     private int _state;
@@ -13,6 +13,8 @@ public class Card : MonoBehaviour {
     private int _cardValue;
     [SerializeField]
     private bool _initialized = false;
+    [SerializeField]
+    private int _column;
 
     private Sprite _cardBack;
     public Sprite _cardFace;
@@ -35,18 +37,18 @@ public class Card : MonoBehaviour {
 
     public void flipCard()
     {
-        if (_state == 0 && !DO_NOT)
+        if (_state == 0)
+        {
             // if card is showing its back, flip to show face
             GetComponent<Image>().sprite = _cardFace;
-
-        else if (_state == 1 && !DO_NOT)
+            _state = 1;
+        }
+        else if (_state == 1)
+        {
             // if card is showing its face, flip to show back
             GetComponent<Image>().sprite = _cardBack;
-
-        if (_state == 0)
-            _state = 1;
-        else if (_state == 1)
             _state = 0;
+        }
     }
 
     public int cardValue
@@ -67,18 +69,9 @@ public class Card : MonoBehaviour {
         set { _initialized = value; }
     }
 
-    public void falseCheck()
+    public int column
     {
-        StartCoroutine(pause());
-    }
-
-    IEnumerator pause()
-    {
-        yield return new WaitForSeconds(1);
-        if (_state == 0)
-            GetComponent<Image>().sprite = _cardBack;
-        else if (_state == 1)
-            GetComponent<Image>().sprite = _cardFace;
-        DO_NOT = false;
+        get { return _column; }
+        set { _column = value; }
     }
 }
