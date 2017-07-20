@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2017
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Card_Game", "Card_Game.csproj", "{CD6DFC64-C5A5-C6DF-B4BD-10ED3B10DBEE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CD6DFC64-C5A5-C6DF-B4BD-10ED3B10DBEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD6DFC64-C5A5-C6DF-B4BD-10ED3B10DBEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD6DFC64-C5A5-C6DF-B4BD-10ED3B10DBEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD6DFC64-C5A5-C6DF-B4BD-10ED3B10DBEE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
