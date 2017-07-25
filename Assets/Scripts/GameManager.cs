@@ -12,7 +12,8 @@ public class GameManager : MonoBehaviour
     public Text royalCounter;
 
     private bool _init = false;
-    private int _counter = 0;
+    private int _counter = 0;   // counter for number of royals clicked
+    public int columnCounter = 1; // counter for column
 
     private List<int> initUsedCardValues = new List<int>(); // list of values of cards used during initialization
     private List<int> usedCards = new List<int>(); // list of cards used
@@ -64,21 +65,28 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < cards.Length; i++)
         {
-            if (cards[i].GetComponent<Card>().state == 1)
+            if (cards[i].GetComponent<Card>().state == 1 && !usedCardValues.Contains(cards[i].GetComponent<Card>().cardValue))
             {
-                // if card is face up, state = 1
-                if (!usedCardValues.Contains(cards[i].GetComponent<Card>().cardValue))
+                // if card is face up (state = 1) and hasn't been used before
+                if (cards[i].GetComponent<Card>().column == columnCounter)
                 {
+                    // if the card is on the appropriate column
+                    
                     // if Card is not already included in the Used Cards List, add it
                     usedCards.Add(i);
+
+                    // add Card Value to the Used Card Values List
+                    usedCardValues.Add(cards[i].GetComponent<Card>().cardValue);
+                    columnCounter++;
+
+                    //when card is flipped, check if it is a royal
+                    cardComparison(usedCards);
                 }
-                // add Card Value to the Used Card Values List
-                usedCardValues.Add(cards[i].GetComponent<Card>().cardValue);
+                else
+                    //if the selected card is not in the appropirate column, flip it back over
+                    cards[i].GetComponent<Card>().flipCardBack();
             }
         }
-
-        //when card is flipped, check if it is a royal
-        cardComparison(usedCards);
     }
 
     void cardComparison(List<int> c)

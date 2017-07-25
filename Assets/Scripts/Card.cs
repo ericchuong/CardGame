@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class Card : MonoBehaviour {
 
-    public static bool DO_NOT = true;
+    public static bool DO_NOT = false;
 
     [SerializeField]
     private int _state;
@@ -23,7 +23,7 @@ public class Card : MonoBehaviour {
 
     private void Start()
     {
-        _state = 1; // state 0 = face down
+        _state = 0; // state 0 = face down
         _manager = GameObject.FindGameObjectWithTag("Manager");
     }
 
@@ -31,11 +31,9 @@ public class Card : MonoBehaviour {
     {
         _cardBack = _manager.GetComponent<GameManager>().getCardBack();
         _cardFace = _manager.GetComponent<GameManager>().getCardFace(_cardValue);
-
-        flipCard();
     }
 
-    public void flipCard()
+    public void flipCardFace()
     {
         if (_state == 0)
         {
@@ -43,7 +41,11 @@ public class Card : MonoBehaviour {
             GetComponent<Image>().sprite = _cardFace;
             _state = 1;
         }
-        else if (_state == 1)
+    }
+
+    public void flipCardBack()
+    {
+        if (_state == 1)
         {
             // if card is showing its face, flip to show back
             GetComponent<Image>().sprite = _cardBack;
