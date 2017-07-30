@@ -15,6 +15,8 @@ public class Card : MonoBehaviour {
     private bool _initialized = false;
     [SerializeField]
     private int _column;
+    [SerializeField]
+    private int _row;
 
     private Sprite _cardBack;
     public Sprite _cardFace;
@@ -75,5 +77,11 @@ public class Card : MonoBehaviour {
     {
         get { return _column; }
         set { _column = value; }
+    }
+
+    public int row
+    {
+        get { return _row; }
+        set { _row = value; }
     }
 }
