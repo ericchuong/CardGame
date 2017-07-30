@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     private bool _init = false;
     private int _counter = 0;   // counter for number of royals clicked
     public int columnCounter = 1; // counter for column
-    public int rowCounter = 4; // counter for row
+    public int rowCounter = 5; // counter for row
     public bool replace; // true to replace face up cards after a royal is drawn
 
     private List<int> initUsedCardValues = new List<int>(); // list of values of cards used during initialization
@@ -30,6 +30,10 @@ public class GameManager : MonoBehaviour
             checkCards();
         if (replace)
             replaceCards();
+        if (columnCounter > 7)
+        {
+            royalCounter.text = "WINNER";
+        }
     }
 
     void initializeCards()
@@ -153,7 +157,7 @@ public class GameManager : MonoBehaviour
                 //reset column to start
                 columnCounter = 1;
                 //reset row to start
-                rowCounter = 4;
+                rowCounter = 5;
             }
         }
     }
