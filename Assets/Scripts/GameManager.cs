@@ -10,12 +10,15 @@ public class GameManager : MonoBehaviour
     public Sprite cardBack;
     public GameObject[] cards;
     public Text royalCounter;
+    public Text royalList;
 
     private bool _init = false;
     private int _counter = 0;   // counter for number of royals clicked
     public int columnCounter = 1; // counter for column
     public int rowCounter = 5; // counter for row
     public bool replace; // true to replace face up cards after a royal is drawn
+    private string newRoyalCard; // name of royal card to be listed after it is selected
+    private int newRoyalCardCounter = 0;
 
     private List<int> initUsedCardValues = new List<int>(); // list of values of cards used during initialization
     private List<int> usedCards = new List<int>(); // list of cards used
@@ -29,12 +32,17 @@ public class GameManager : MonoBehaviour
         if (Input.GetMouseButtonUp(0)) // every time a card is clicked
             checkCards();
         if (replace)
+        {
+            StartCoroutine(pause());
             replaceCards();
+        }
         if (columnCounter > 7)
         {
             royalCounter.text = "WINNER";
         }
+
     }
+
 
     void initializeCards()
     {
@@ -129,18 +137,78 @@ public class GameManager : MonoBehaviour
         if (cards[c[c.Count - 1]].GetComponent<Card>().cardValue > 35)
         {
             // CARD IS A ROYAL
+            Card.DO_NOT = true;
+            pause();
             _counter++;
             royalCounter.text = "Royals Drawn " + _counter;
+
+            switch(cards[c[c.Count - 1]].GetComponent<Card>().cardValue)
+            {
+                // Chooses which card based on value
+                case 36:
+                    newRoyalCard = "Jack Diamonds";
+                    break;
+                case 37:
+                    newRoyalCard = "Queen Diamonds";
+                    break;
+                case 38:
+                    newRoyalCard = "King Diamonds";
+                    break;
+                case 39:
+                    newRoyalCard = "Ace Diamonds";
+                    break;
+                case 40:
+                    newRoyalCard = "Jack Clubs";
+                    break;
+                case 41:
+                    newRoyalCard = "Queen Clubs";
+                    break;
+                case 42:
+                    newRoyalCard = "King Clubs";
+                    break;
+                case 43:
+                    newRoyalCard = "Ace Clubs";
+                    break;
+                case 44:
+                    newRoyalCard = "Jack Hearts";
+                    break;
+                case 45:
+                    newRoyalCard = "Queen Hearts";
+                    break;
+                case 46:
+                    newRoyalCard = "King Hearts";
+                    break;
+                case 47:
+                    newRoyalCard = "Ace Hearts";
+                    break;
+                case 48:
+                    newRoyalCard = "Jack Spades";
+                    break;
+                case 49:
+                    newRoyalCard = "Queen Spades";
+                    break;
+                case 50:
+                    newRoyalCard = "King Spades";
+                    break;
+                case 51:
+                    newRoyalCard = "Ace Spades";
+                    break;
+            }
+
+            royalList.text = royalList.text + "\t" +  newRoyalCard + "\t";
+            newRoyalCardCounter++;
+            if (newRoyalCardCounter % 4 == 0)
+                royalList.text = royalList.text + "\n";
 
             if (_counter == 16)
             {
                 // Game Over
                 royalCounter.text = "Game Over";
-                //SceneManager.LoadScene("MainMenu");
             }
             return true;
         }
         else
+            // CARD IS NOT A ROYAL
             return false;
     }
 
@@ -186,5 +254,11 @@ public class GameManager : MonoBehaviour
         initUsedCardValues.Add(choice);
         card.GetComponent<Card>().setupGraphics();
         here:;
+    }
+
+    IEnumerator pause()
+    {
+        yield return new WaitForSecondsRealtime(20);
+        Card.DO_NOT = false;
     }
 }

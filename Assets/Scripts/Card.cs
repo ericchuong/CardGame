@@ -84,4 +84,5 @@ public class Card : MonoBehaviour {
         get { return _row; }
         set { _row = value; }
     }
+
 }
